@@ -47,5 +47,5 @@ jobs:
         python-version: '3.x'
 
     - name: Run validation script
-      run: python ../../script-repo/valida_dependencias.py --path_projeto projeto-repo/${{inputs.diretorio-sln}} --tipo_projeto ${{inputs.diretorio-sln}}
+      run: python ../../script-repo/valida_dependencias.py --tipo_projeto ${{inputs.diretorio-sln}}
       working-directory: projeto-repo/${{inputs.diretorio-sln}}
