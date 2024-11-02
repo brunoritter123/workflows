@@ -45,7 +45,7 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ${{inputs.diretorio-sln}}
+      working-directory: reusable-repo/${{inputs.diretorio-sln}}
 
     - name: Set up Python
       uses: actions/setup-python@v2
