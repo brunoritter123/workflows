@@ -23,29 +23,14 @@ jobs:
     - name: Checkout caller repository
       uses: actions/checkout@v4
       with:
-        path: caller-repo
+        path: projeto-repo
 
     - name: Checkout reusable workflow repository
       uses: actions/checkout@v4
       with:
         repository: brunoritter123/workflows
         token: ${{ secrets.GH_TOKEN }}  # Autenticação para acessar o repositório do workflow reutilizável
-        path: reusable-repo
-
-    - name: Teste Input tipo-projeto
-      run: echo tipo-projeto ${{inputs.tipo-projeto}}
-
-    - name: Teste Input diretorio-sln
-      run: echo diretorio-sln ${{inputs.diretorio-sln}}
-
-    - name: Lista arquivos
-      run: ls
-
-    - name: Lista arquivos caller-repo
-      run: ls caller-repo
-
-    - name: Lista arquivos reusable-repo
-      run: ls reusable-repo
+        path: script-repo
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -54,7 +39,7 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ${{inputs.diretorio-sln}}
+      working-directory: projeto-repo/${{inputs.diretorio-sln}}
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -62,5 +47,4 @@ jobs:
         python-version: '3.x'
 
     - name: Run validation script
-      run: python reusable-repo/valida_dependencias.py --path_projeto caller-repo/${{inputs.diretorio-sln}} --tipo_projeto ${{inputs.diretorio-sln}}
-      working-directory: ${{inputs.diretorio-sln}}
+      run: python script-repo/valida_dependencias.py --path_projeto caller-repo/${{inputs.diretorio-sln}} --tipo_projeto ${{inputs.diretorio-sln}}
