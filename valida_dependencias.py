@@ -1,4 +1,5 @@
 """Validador de dependencias em projeto dotnet"""
+import argparse
 import subprocess
 import json
 import os
@@ -44,10 +45,6 @@ def run_command_shell_json(command):
         print(f"Erro ao decodificar JSON do comando '{command}': {e}")
         return None
 
-
-# Executa os comandos e carrega os JSONs
-lista_pacotes_desatalizados = run_command_shell_json(
-    'dotnet list package --outdated --format json')
 
 
 def valida_dependencias_projeto():
@@ -96,6 +93,10 @@ def valida_dependencias_projeto():
 
 def valida_dependencias_nao_atualizadas():
     """Valida dependencias não atualizadas"""
+    # Executa os comandos e carrega os JSONs
+    lista_pacotes_desatalizados = run_command_shell_json(
+        'dotnet list package --outdated --format json')
+
     lista_projetos = lista_pacotes_desatalizados["projects"]
     lista_projetos_com_framework_errada = []
     pacotes_esperados_nao_encontrados = list(filter(
@@ -142,35 +143,52 @@ def print_sucess(msg):
     print(f"{GREEN}Success: {msg}{RESET}")
 
 
-# Exemplo de manipulação dos dados carregados
-validacoes_pacotes = valida_dependencias_projeto()
-validacoes_versao = valida_dependencias_nao_atualizadas()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Exemplo de script com parâmetros nomeados.")
 
-print("Lista de Pacotes Desatalizados")
-print(lista_pacotes_desatalizados)
+    # Adiciona os parâmetros nomeados
+    parser.add_argument(
+        "--path_projeto",
+        type=str,
+        required=True,
+        help="Local onde está o .sln")
 
-print("\n-\n")
+    parser.add_argument(
+        "--tipo_projeto",
+        type=str,
+        required=True,
+        help="Tipo do projeto (BFF, API, MFE)")
 
-print("Lista de Pacotes Instalados:")
-print(validacoes_pacotes["lista_pacotes_instalados"])
+    # Parseia os argumentos
+    args = parser.parse_args()
 
-print("\n-\n")
+    print(f"Parametros: {args}")
+    print("\n-\n")
 
-if len(validacoes_pacotes["lista_projetos_com_framework_errada"]) > 0:
-    print_error(f"Projetos com framework diferente de '{FRAMEWORK_PADRAO}'" +
-                str(validacoes_pacotes["lista_projetos_com_framework_errada"]))
-else:
-    print_sucess("Ok - Não existe projetos com framework " +
-                 f"diferente de '{FRAMEWORK_PADRAO}'.")
+    # Exemplo de manipulação dos dados carregados
+    validacoes_pacotes = valida_dependencias_projeto()
+    validacoes_versao = valida_dependencias_nao_atualizadas()
 
-if len(validacoes_pacotes["pacotes_esperados_nao_encontrados"]) > 0:
+    print("Lista de Pacotes Instalados:")
+    print(validacoes_pacotes["lista_pacotes_instalados"])
 
-    print_error("Pacotes que não foram encontrados: " +
-                str(validacoes_pacotes["pacotes_esperados_nao_encontrados"]))
-else:
-    print_sucess("Ok - Todos os pacotes esperados foram encontrados")
+    print("\n-\n")
 
-if len(validacoes_versao) > 0:
-    print_error("Pacotes com a versão desatualizda " + str(validacoes_versao))
-else:
-    print_sucess("Ok - Todos os pacotes estão com as versão esperadas")
+    if len(validacoes_pacotes["lista_projetos_com_framework_errada"]) > 0:
+        print_error(f"Projetos com framework diferente de '{FRAMEWORK_PADRAO}'" +
+                    str(validacoes_pacotes["lista_projetos_com_framework_errada"]))
+    else:
+        print_sucess("Ok - Não existe projetos com framework " +
+                    f"diferente de '{FRAMEWORK_PADRAO}'.")
+
+    if len(validacoes_pacotes["pacotes_esperados_nao_encontrados"]) > 0:
+
+        print_error("Pacotes que não foram encontrados: " +
+                    str(validacoes_pacotes["pacotes_esperados_nao_encontrados"]))
+    else:
+        print_sucess("Ok - Todos os pacotes esperados foram encontrados")
+
+    if len(validacoes_versao) > 0:
+        print_error("Pacotes com a versão desatualizda " + str(validacoes_versao))
+    else:
+        print_sucess("Ok - Todos os pacotes estão com as versão esperadas")

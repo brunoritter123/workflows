@@ -10,13 +10,27 @@ on:
         description: 'Diretorio onde está o arquivo .sln'
         required: true
         type: string
+    secrets:  # Permite o uso de secrets do repositório chamador, caso necessário
+      GH_TOKEN:
+        required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    # Checkout do repositório chamador para obter o caminho dele
+    - name: Checkout caller repository
+      uses: actions/checkout@v4
+      with:
+        path: caller-repo
+
+    - name: Checkout reusable workflow repository
+      uses: actions/checkout@v4
+      with:
+        repository: brunoritter123/workflows
+        token: ${{ secrets.GH_TOKEN }}  # Autenticação para acessar o repositório do workflow reutilizável
+        path: reusable-repo
 
     - name: Teste Input tipo-projeto
       run: echo tipo-projeto ${{inputs.tipo-projeto}}
@@ -42,5 +56,5 @@ jobs:
       run: ls
 
     - name: Run validation script
-      run: python valida_dependencias.py
+      run: python reusable-repo/valida_dependencias.py --path_projeto caller-repo/${{inputs.diretorio-sln}} --tipo_projeto ${{inputs.diretorio-sln}}
       working-directory: ${{inputs.diretorio-sln}}
