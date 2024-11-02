@@ -27,9 +27,8 @@ jobs:
       run: dotnet restore
       working-directory: ${{inputs.diretorio-sln}}
 
+    - name: Teste Input tipo-projeto
+      run: echo tipo-projeto ${{inputs.tipo-projeto}}
 
-    - name: Teste Inputs
-      run: echo The tags are ${{inputs.tipo-projeto}}
-
-    - name: Teste Inputs
-      run: echo The tags are ${{inputs.tipo-projeto}}
+    - name: Teste Input diretorio-sln
+      run: echo diretorio-sln ${{inputs.diretorio-sln}}
