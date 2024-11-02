@@ -18,6 +18,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Teste Input tipo-projeto
+      run: echo tipo-projeto ${{inputs.tipo-projeto}}
+
+    - name: Teste Input diretorio-sln
+      run: echo diretorio-sln ${{inputs.diretorio-sln}}
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -27,8 +33,14 @@ jobs:
       run: dotnet restore
       working-directory: ${{inputs.diretorio-sln}}
 
-    - name: Teste Input tipo-projeto
-      run: echo tipo-projeto ${{inputs.tipo-projeto}}
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-    - name: Teste Input diretorio-sln
-      run: echo diretorio-sln ${{inputs.diretorio-sln}}
+    - name: Lista arquivos
+      run: ls
+
+    - name: Run validation script
+      run: python valida_dependencias.py
+      working-directory: ${{inputs.diretorio-sln}}
