@@ -22,15 +22,15 @@ jobs:
     # Checkout do repositório chamador para obter o caminho dele
     - name: Checkout caller repository
       uses: actions/checkout@v4
-      with:
-        path: caller-repo
+      # with:
+      #   path: caller-repo
 
     - name: Checkout reusable workflow repository
       uses: actions/checkout@v4
       with:
         repository: brunoritter123/workflows
         token: ${{ secrets.GH_TOKEN }}  # Autenticação para acessar o repositório do workflow reutilizável
-        path: reusable-repo
+        # path: reusable-repo
 
     - name: Teste Input tipo-projeto
       run: echo tipo-projeto ${{inputs.tipo-projeto}}
