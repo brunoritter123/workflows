@@ -1,0 +1,23 @@
+name: valida-dependencias
+on:
+  workflow_call:
+    inputs:
+      tipo-projeto:
+        type: string
+        description: 'Tipo do projeto que está utilizando a action (API, BFF, MFE)'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Teste Inputs
+      run: echo The tags are ${{ inputs.tipo-projeto }}
