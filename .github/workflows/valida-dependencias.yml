@@ -3,9 +3,13 @@ on:
   workflow_call:
     inputs:
       tipo-projeto:
-        type: string
         description: 'Tipo do projeto que está utilizando a action (API, BFF, MFE)'
         required: true
+        type: string
+      diretorio-sln:
+        description: 'Diretorio onde está o arquivo .sln'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -19,5 +23,13 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ${{inputs.diretorio-sln}}
+
+
     - name: Teste Inputs
-      run: echo The tags are ${{ inputs.tipo-projeto }}
+      run: echo The tags are ${{inputs.tipo-projeto}}
+
+    - name: Teste Inputs
+      run: echo The tags are ${{inputs.tipo-projeto}}
