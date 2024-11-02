@@ -13,7 +13,7 @@ GREEN = '\033[92m'  # Verde
 RESET = '\033[0m'   # Resetar a cor
 
 # Padrões
-FRAMEWORK_PADRAO = "net7.0"
+FRAMEWORK_PADRAO = "net8.0"
 PACOTES_ESPERADOS = [
     {
         "projeto": "TestePrometheusGrafana.csproj",

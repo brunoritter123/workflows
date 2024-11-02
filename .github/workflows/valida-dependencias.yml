@@ -15,7 +15,7 @@ on:
         required: true
 
 jobs:
-  build:
+  valida-dependencias:
     runs-on: ubuntu-latest
 
     steps:
